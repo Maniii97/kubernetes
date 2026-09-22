@@ -133,3 +133,27 @@ func TestCreateQuota(t *testing.T) {
 		})
 	}
 }
+
+func TestPopulateResourceListV1(t *testing.T) {
+	tests := map[string]struct {
+		spec      string
+		wantError bool
+	}{
+		"valid resource": {
+			spec: "cpu=1",
+		},
+		"empty resource name": {
+			spec:      "=1",
+			wantError: true,
+		},
+	}
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			_, err := populateResourceListV1(tc.spec)
+			if (err != nil) != tc.wantError {
+				t.Errorf("populateResourceListV1(%q) error = %v, wantError %t", tc.spec, err, tc.wantError)
+			}
+		})
+	}
+}

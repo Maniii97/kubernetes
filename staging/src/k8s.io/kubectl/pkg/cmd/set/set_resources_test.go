@@ -91,6 +91,30 @@ func TestResourcesLocal(t *testing.T) {
 	}
 }
 
+func TestParseResourceList(t *testing.T) {
+	tests := map[string]struct {
+		spec      string
+		wantError bool
+	}{
+		"valid resource": {
+			spec: "cpu=1",
+		},
+		"empty resource name": {
+			spec:      "=1",
+			wantError: true,
+		},
+	}
+
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			_, err := parseResourceList(tc.spec)
+			if (err != nil) != tc.wantError {
+				t.Errorf("parseResourceList(%q) error = %v, wantError %t", tc.spec, err, tc.wantError)
+			}
+		})
+	}
+}
+
 func TestSetMultiResourcesLimitsLocal(t *testing.T) {
 	tf := cmdtesting.NewTestFactory().WithNamespace("test")
 	defer tf.Cleanup()
