@@ -237,6 +237,9 @@ func populateResourceListV1(spec string) (corev1.ResourceList, error) {
 		if len(parts) != 2 {
 			return nil, fmt.Errorf("Invalid argument syntax %v, expected <resource>=<value>", resourceStatement)
 		}
+		if parts[0] == "" {
+			return nil, fmt.Errorf("Invalid argument syntax %v, resource name cannot be empty", resourceStatement)
+		}
 		resourceName := corev1.ResourceName(parts[0])
 		resourceQuantity, err := resourceapi.ParseQuantity(parts[1])
 		if err != nil {

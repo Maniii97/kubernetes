@@ -320,6 +320,9 @@ func parseResourceList(spec string) (v1.ResourceList, error) {
 		if len(parts) != 2 {
 			return nil, fmt.Errorf("invalid argument syntax %v, expected <resource>=<value>", resourceStatement)
 		}
+		if parts[0] == "" {
+			return nil, fmt.Errorf("invalid argument syntax %v, resource name cannot be empty", resourceStatement)
+		}
 		resourceName := v1.ResourceName(parts[0])
 		resourceQuantity, err := apiresource.ParseQuantity(parts[1])
 		if err != nil {
